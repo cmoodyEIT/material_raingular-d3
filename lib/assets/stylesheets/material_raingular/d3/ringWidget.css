@@ -1,0 +1,51 @@
+/******************************************************************************
+  Styling for RingWidgetModule
+******************************************************************************/
+mr-d3-ring-widget {
+  text-align: center;
+}
+
+mr-d3-ring {
+  display: block;
+}
+
+mr-d3-ring svg text {
+  font-family: sans-serif;
+  font-size: 12px;
+  fill: white;
+}
+
+mr-d3-ring svg text.center {
+  font-family: sans-serif;
+  font-size: 60px;
+  fill: white;
+  stroke: black;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  text-anchor: middle;
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+     -khtml-user-select: none; /* Konqueror */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
+}
+
+/*.mr-d3-ring-scale {
+  display: inline-block;
+  width: 200px;
+  height: 200px;
+}*/
+
+mr-d3-ring svg g.arc {
+  opacity: 0.2;
+}
+
+mr-d3-ring svg g.arc.selected {
+  opacity: 1;
+}
+
+mr-d3-ring svg g.arc:hover {
+  opacity: 1;
+}
