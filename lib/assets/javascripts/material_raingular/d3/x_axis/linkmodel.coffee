@@ -1,22 +1,21 @@
 class XAxisModel extends AngularLinkModel
-  @inject('$interpolate')
+  @inject('$interpolate','$parse')
   initialize: ->
-    for key in ['label','min','max']
+    for key in ['label','domain']
       @[key] = angular.element @$element[0].getElementsByTagName(key)
     @parent = @$controller.compact()[0]
     @options = @parent.options
     @appendLabel()
-    @appendAxis()
+    domainStringFn = @$interpolate(@domain.html())
+    @$scope.$watch domainStringFn, @adjustAxis.bind(@)
+    @axis = @parent.appendXAxis(@$scope.$eval(domainStringFn(@$scope)))
+  adjustAxis: (newVal,oldVal) ->
+    return if newVal == oldVal
+    @parent.adjustXAxis(@axis,@$scope.$eval(newVal))
   appendLabel: ->
-    @parent.svg.append('text')
+    @label = @parent.svg.append('text')
     .attr('x', @parent.width()/2 + @options.margins.left)
     .attr('y', @parent.$element[0].offsetHeight - (@options.margins.bottom - 30) / 2)
     .style("text-anchor","middle")
     .text(@label.html())
-  appendAxis: ->
-    x = d3.scaleLinear().range([0,@parent.width()])
-    x.domain([@min.html(),@max.html()])
-    @parent.svg.append('g')
-    .attr('transform',"translate(#{@parent.options.margins.left},#{@parent.height() + @parent.options.margins.top})")
-    .call(d3.axisBottom(x))
   @register(MaterialRaingular.d3.Directives.MrD3XAxis)
