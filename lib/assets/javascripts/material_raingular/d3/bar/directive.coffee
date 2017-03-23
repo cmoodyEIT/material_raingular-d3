@@ -1,7 +1,7 @@
 class MaterialRaingular.d3.Directives.MrD3Bar extends AngularDirective
   @register(MaterialRaingular.d3.app)
   restrict: "E"
-  require: '^^mrD3HorizontalBarChart'
+  require: ['?^mrD3HorizontalBarChart','?^mrD3BarChart']
   transclude: true
   template: "<span style='display:none' ng-transclude></span>"
   # controller: DirectiveModels.HorizontalBarChartModel
