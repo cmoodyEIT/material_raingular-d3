@@ -6,3 +6,9 @@ class MrD3RingWidget extends AngularDirective
   scope: {}
   controller: MaterialRaingular.d3.Directives.MrD3RingWidget
   @register(MaterialRaingular.d3.app)
+###
+  Usage Slim Syntax
+    mr-d3-ring-widget
+      h3
+        | Bio Billability
+      mr-d3-ring ring-data="[50,10]"
