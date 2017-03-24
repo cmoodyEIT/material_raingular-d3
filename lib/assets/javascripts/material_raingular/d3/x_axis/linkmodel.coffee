@@ -1,21 +1,25 @@
 class XAxisModel extends AngularLinkModel
-  @inject('$interpolate','$parse')
+  @inject('$parse')
   initialize: ->
-    for key in ['label','domain']
-      @[key] = angular.element @$element[0].getElementsByTagName(key)
     @parent = @$controller.compact()[0]
     @options = @parent.options
+    @parent._xAxis = @axis = d3.select(@$element[0])
+    @axis.attr('transform',"translate(0,#{@parent.height()})")
+    @label  = @$parse @$attrs.mrD3Label
+    @domain = @$parse @$attrs.mrD3Domain
+    @$scope.$watchCollection @domain, @adjustAxis.bind(@)
+    @$scope.$watch @label,  @adjustAxis.bind(@)
     @appendLabel()
-    domainStringFn = @$interpolate(@domain.html())
-    @$scope.$watch domainStringFn, @adjustAxis.bind(@)
-    @axis = @parent.appendXAxis(@$scope.$eval(domainStringFn(@$scope)))
+    @adjustAxis(true)
   adjustAxis: (newVal,oldVal) ->
     return if newVal == oldVal
-    @parent.adjustXAxis(@axis,@$scope.$eval(newVal))
+    @parent.xAxis.domain(@domain(@$scope)) if @domain(@$scope)
+    @axis.call(d3.axisBottom(@parent.xAxis))
+    @labelEl.text(@label(@$scope)) if @label(@$scope)
+    @parent.adjustBars()
   appendLabel: ->
-    @label = @parent.svg.append('text')
-    .attr('x', @parent.width()/2 + @options.margins.left)
-    .attr('y', @parent.$element[0].offsetHeight - (@options.margins.bottom - 30) / 2)
+    @labelEl = @parent.holder.append('text')
+    .attr('x', @parent.width()/2)
+    .attr('y', @parent.height() + (@options.margins.bottom + 30) / 2)
     .style("text-anchor","middle")
-    .text(@label.html())
   @register(MaterialRaingular.d3.Directives.MrD3XAxis)

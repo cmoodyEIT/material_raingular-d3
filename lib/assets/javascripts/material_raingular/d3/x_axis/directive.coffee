@@ -3,4 +3,5 @@ class MaterialRaingular.d3.Directives.MrD3XAxis extends AngularDirective
   restrict: "E"
   require: ['?^mrD3HorizontalBarChart','?^mrD3BarChart']
   transclude: true
-  template: "<span style='display:none' ng-transclude></span>"
+  replace: true
+  template: "<g class='x axis'></g>"
