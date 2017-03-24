@@ -12,3 +12,4 @@ class MrD3RingWidget extends AngularDirective
       h3
         | Bio Billability
       mr-d3-ring ring-data="[50,10]"
+###
