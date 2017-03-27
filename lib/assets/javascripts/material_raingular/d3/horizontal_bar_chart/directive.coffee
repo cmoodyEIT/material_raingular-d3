@@ -5,7 +5,7 @@ class MrD3HorizontalBarChart extends AngularDirective
   controller: MaterialRaingular.d3.Directives.MrD3HorizontalBarChartModel
   transclude: true
   replace: true
-  template: "<svg height='100%' width: 100%><g ng-transclude></g></svg>"
+  template: "<svg height='100%' width='100%'><g ng-transclude></g></svg>"
 ###
   Usage Slim Syntax
   mr-d3-horizontal-bar-chart.test ng-init="dataSet = [{l: 'a',v: 23},{l: 'b',v: 13},{l: 'c',v: 21},{l: 'd',v: 14},{l: 'e',v: 37},{l: 'f',v: 15},{l: 'g',v: 18},{l: 'h',v: 34},{l: 'i',v: 30}]"

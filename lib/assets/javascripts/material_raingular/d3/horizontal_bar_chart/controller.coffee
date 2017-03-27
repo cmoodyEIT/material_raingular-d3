@@ -25,8 +25,8 @@ class MaterialRaingular.d3.Directives.MrD3HorizontalBarChartModel extends Angula
       d3.select(rect).attr('height',@yAxis.bandwidth())
       d3.select(rect).attr('y',@yAxis(@yDomain[@indexOf(rect)]))
     @_yAxis?.call(d3.axisLeft(@yAxis))
-  height:   -> @$element[0].clientHeight - @options.margins.top  - @options.margins.bottom
-  width:    -> @$element[0].clientWidth  - @options.margins.left - @options.margins.right
+  height:   -> @$element[0].parentElement.clientHeight - @options.margins.top  - @options.margins.bottom
+  width:    -> @$element[0].parentElement.clientWidth  - @options.margins.left - @options.margins.right
   maxValue: ->
     val   = @xAxis?.domain().max()
     val ||= (@bars().nodes().map (rect) -> d3.select(rect).attr('raw-size')).max()

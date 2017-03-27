@@ -26,8 +26,8 @@ class MaterialRaingular.d3.Directives.MrD3BarChartModel extends AngularDirective
       d3.select(rect).attr('width',@xAxis.bandwidth())
       d3.select(rect).attr('x',@xAxis(@xDomain[@indexOf(rect)]))
     @_xAxis?.call(d3.axisBottom(@xAxis))
-  height:   -> @$element[0].clientHeight - @options.margins.top  - @options.margins.bottom
-  width:    -> @$element[0].clientWidth  - @options.margins.left - @options.margins.right
+  height:   -> @$element[0].parentElement.clientHeight - @options.margins.top  - @options.margins.bottom
+  width:    -> @$element[0].parentElement.clientWidth  - @options.margins.left - @options.margins.right
   maxValue: ->
     val   = @yAxis?.domain().max()
     val ||= (@bars().nodes().map (rect) -> d3.select(rect).attr('raw-size')).max()
