@@ -22,11 +22,15 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
     y      = @bar.attr('y')
     usedSpace = 0
     key = @bar.node().$$hashKey?.replace(':','_') #TODO: Not Dependable
+    fill = null
+    fillRegex = /.*\(([0-9]+\, [0-9]+\, [0-9]+).*\)/
     @parent.holder.selectAll("text.bar.#{key}").remove()
+    length = @bars().nodes().length
     for rect,i in @bars().nodes()
       bar = d3.select(rect)
       bar.attr('class',"#{i} bar")
-      bar.attr('fill',"rgba(1,1,1,#{1 - (0.1 * i)})")
+      fill = fill || bar.attr('fill').match(fillRegex)?[1] || '0,0,0'
+      bar.attr('fill',"rgba(#{fill},#{1 - i/length})")
       text = @parent.holder.append('text')
       .style("text-anchor","middle")
       .attr('class',"#{i} bar text #{key}")

@@ -13,7 +13,7 @@ class PieChartModel extends AngularLinkModel
     @drawChart(data)
 
   setSize: (data) ->
-    @options = @$scope.$eval(@$attrs.d3Options) || {}
+    @options = @$scope.$eval(@$attrs.mrD3Options) || {}
     @width   = @options.width  || 960
     @height  = @options.height || 500
     @color   = @options.color  || '6b486b'
@@ -26,7 +26,7 @@ class PieChartModel extends AngularLinkModel
   drawChart: (data) ->
     @chartLayer.selectAll('g').remove()
     arcs = d3.pie().sort(null).value((d) -> d.value)(data)
-    arc  = d3.arc().outerRadius(@chartHeight / 2).innerRadius(@chartHeight / 4).padAngle(0.03).cornerRadius(8) #/ <- I hate atom right now
+    arc  = d3.arc().outerRadius(@chartHeight / 2).innerRadius(@chartHeight / 4).padAngle(0.03).cornerRadius(8)
     pieG = @chartLayer.selectAll('g').data([ data ]).enter().append('g').attr('transform', "translate(#{[@chartWidth / 2,@chartHeight / 2]})")
     block = pieG.selectAll('.arc').data(arcs)
     newBlock = block.enter().append('g').classed('arc', true)

@@ -4,7 +4,7 @@ class XAxisModel extends AngularLinkModel
     @parent = @$controller.compact()[0]
     @options = @parent.options
     @parent._xAxis = @
-    @axis = d3.select(@$element[0])
+    @axis   = d3.select(@$element[0])
     @label  = @$parse @$attrs.mrD3Label
     @domain = @$parse @$attrs.mrD3Domain
     @$scope.$watchCollection @domain, @adjustAxis.bind(@)

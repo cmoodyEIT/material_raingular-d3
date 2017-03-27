@@ -3,6 +3,7 @@ class BarModel extends AngularLinkModel
   initialize: ->
     @parent = @$controller.compact()[0]
     @bar = d3.select(@$element[0])
+    .attr 'fill', d3.interpolateCool Math.random()
     @label = @$parse @$attrs.mrD3Label
     @size  = @$parse @$attrs.mrD3Value
     @$scope.$watch @size.bind(@),  @changeBar.bind(@)
