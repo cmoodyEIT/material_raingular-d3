@@ -1,5 +1,5 @@
-class PieChartModel extends AngularLinkModel
-  @inject('$timeout')
+class MaterialRaingular.d3.Directives.PieChartModel extends AngularDirectiveModel
+  @inject('$timeout','$element','$attrs')
   initialize: ->
     @svg = d3.select(@$element[0]).append('svg')
     @chartLayer = @svg.append('g').classed('chartLayer', true)
@@ -27,36 +27,49 @@ class PieChartModel extends AngularLinkModel
   drawChart: (data) ->
     @chartLayer.selectAll('g').remove()
     arcs = d3.pie().sort(null).value((d) -> d.value)(data)
-    arc  = d3.arc().outerRadius(@chartHeight / 2).innerRadius(@chartHeight / 4).padAngle(0).cornerRadius(4)
+    arc  = d3.arc().outerRadius(@chartHeight / 2).innerRadius(0)
     pieG = @chartLayer.selectAll('g').data([ data ]).enter().append('g').attr('transform', "translate(#{[@chartWidth / 2,@chartHeight / 2]})")
     block = pieG.selectAll('.arc').data(arcs)
-    newBlock = block.enter().append('g').classed('arc', true)
-    newBlock.append('path')
+    @newBlock = block.enter().append('g').classed('arc', true)
+    @newBlock.append('path')
       .attr('d', arc)
       .attr('id', (d, i) -> 'arc-' + i)
-      .attr('stroke', 'white').attr 'fill', (d, i) -> d3.interpolateCool Math.random()
-      .on('mouseover', @_tooltipMouseOver).on('mouseout', @_tooltipMouseOut).on('mousemove', @_tooltipMouseMove)
-    newBlock.append('text')
+      .attr 'fill', (d, i) -> d3.interpolateCool Math.random()
+      .on('mouseover', @_mouseOver)
+      .on('mouseout',  @_mouseOut)
+      .on('mousemove', @_mouseMove)
+      .on('click',     @_click.bind(@))
+    @newBlock.append('text')
       .style('text-anchor', 'middle')
       .style('pointer-events', 'none')
       .style('fill', '#fff')
       .attr('dy', '.35em')
-      .attr('transform', (d) ->
+      .attr 'transform', (d) ->
         centroid = arc.centroid(d)
         x = centroid[0]
         y = centroid[1]
-        return 'translate(' + x + ',' + y + ')')
-        .text (d) ->
-          return d.data.value
-  _tooltipMouseOver: (d, i) ->
+        'translate(' + x + ',' + y + ')'
+      .text (d) -> d.data.value
+  _mouseOver: (d, i) ->
     d3.select('#tip-'+ i + (d.data.value.toFixed()))
       .classed('hidden', false)
       .style('left', d3.event.pageX + 'px')
       .style('top', ((d3.event.pageY - 80 ) / 2) + 'px')
-  _tooltipMouseMove: (d, i) ->
+  _mouseMove: (d, i) ->
     d3.select('#tip-'+ i + (d.data.value.toFixed()))
       .style('left', d3.event.pageX + 'px')
       .style('top', ((d3.event.pageY - 80 ) / 2) + 'px')
-  _tooltipMouseOut: (d, i) ->
+  _mouseOut: (d, i) ->
     d3.select('#tip-'+ i + (d.data.value.toFixed())).classed('hidden', true)
-  @register(MaterialRaingular.d3.Directives.MrD3PieChart)
+  _click: (arc,index) ->
+      t = d3.transition().duration(300).ease(d3.easeLinear)
+      paths = @newBlock.selectAll('path')
+      paths.selectAll('animateTransform').remove()
+      path = d3.select paths.nodes()[index]
+      reduce = !path.attr('transform') || (path.attr('transform').strip() == "translate(0,0)scale(1,1)")
+      paths.transition(t).attr('transform',"translate(0,0) scale(1,1)")
+      return unless reduce
+      theta = (arc.endAngle + arc.startAngle)/2
+      x = 10 * Math.cos (Math.PI / 2) - theta
+      y = -10 * Math.sin (Math.PI / 2) - theta
+      path.transition(t).attr('transform',"translate(#{x},#{y}) scale(1.25,1.25)")
