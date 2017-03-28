@@ -1,7 +1,7 @@
 class MaterialRaingular.d3.Directives.MrD3HorizontalBarChartModel extends AngularDirectiveModel
   @inject('$timeout','$element','$attrs')
   initialize: ->
-    @options = @$scope.$eval(@$attrs.d3Options || '{}')
+    @options = @$scope.$eval(@$attrs.mrD3Options || '{}')
     @options.margins = Object.merge({top: 20,right: 20, left: 70, bottom: 50},@options.margins || {})
     @options.minSize ?= 100
     @svg = d3.select(@$element[0])
