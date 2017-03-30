@@ -29,7 +29,7 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
     for rect,i in @bars().nodes()
       bar = d3.select(rect)
       bar.attr('class',"#{i} bar")
-      fill = fill || bar.attr('fill').match(fillRegex)?[1] || '0,0,0'
+      fill = fill || bar.attr('fill')?.match(fillRegex)?[1] || '0,0,0'
       bar.attr('fill',"rgba(#{fill},#{1 - i/length})")
       text = @parent.holder.append('text')
       .style("text-anchor","middle")

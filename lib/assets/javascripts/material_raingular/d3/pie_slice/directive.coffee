@@ -1,11 +1,10 @@
-# //= require material_raingular/d3/pie_chart/controller
-class MrD3PieChart extends AngularDirective
+class MaterialRaingular.d3.Directives.MrD3PieSlice extends AngularDirective
   restrict: "E"
   @register(MaterialRaingular.d3.app)
   controller: MaterialRaingular.d3.Directives.PieChartModel
-  transclude: true
   replace: true
-  template: "<svg height='100%' width='100%'><g class='chartLayer' ng-transclude></g></svg>"
+  require: '^mrD3PieChart'
+  template: "<g class='arc'></g>"
 ###
   Usage Slim Syntax
     mr-d3-pie-chart d3-data="{bio: 10, planning: 30, cr: 12}"
