@@ -13,10 +13,10 @@ class PieSliceModel extends AngularLinkModel
     @$scope.$watch @valueFn.bind(@), @changeValue.bind(@)
     @$scope.$watch @labelFn.bind(@), @adjustText.bind(@)
     @$scope.$watch @options.bind(@), @changeOptions.bind(@), true
+    @$scope.$on '$destroy', @removeSlice.bind(@)
   changeOptions: (newVal) ->
     return unless newVal
     @path.attr 'fill', newVal.fill || d3.interpolateCool Math.random(@index)
-
   changeValue: (newVal,oldVal) ->
     return unless newVal
     @index = @$controller.changeData(@,newVal)
@@ -40,6 +40,7 @@ class PieSliceModel extends AngularLinkModel
     y = centroid[1]
     @text.attr 'transform', "translate(#{x},#{y})"
     .text @labelFn(@$scope)
+  removeSlice: -> @$controller.removeSlice(@)
   afterDraw: ->
     @adjustText()
   _mouseOver: ->

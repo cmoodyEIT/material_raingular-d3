@@ -6,12 +6,16 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
     @parent ?= @$element.parent().controller('mrD3HorizontalBarChart')
     @bar     = d3.select(@$element[0])
     @label   = @$parse @$element.attr('mr-d3-label')
+    @texts   = []
     @$scope.$watch @label.bind(@), @adjustBars.bind(@)
     @$scope.$watch @size.bind(@),  @adjustBars.bind(@)
+    @$scope.$on '$destroy', @removeText.bind(@)
     @adjustBars()
   bars: -> @bar.selectAll('rect')
   size: -> if @direction == 'vertical' then @bar.attr('height') else @bar.attr('width')
   rawSize: -> (@bars().nodes().map (rect) => d3.select(rect).attr('raw-size')).sum()
+  removeText: ->
+    text.remove() for text in @texts
   adjustBars: ->
     @bar.attr('raw-size',@rawSize() || 0)
     @bar.attr('label',   @label(@$scope))
@@ -35,6 +39,7 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
       .style("text-anchor","middle")
       .attr('class',"#{i} bar text #{key}")
       .text(bar.attr('label'))
+      @texts.push(text)
       if @direction == 'vertical'
         ratio = height / @bar.attr('raw-size')
         barHeight = ratio * bar.attr('raw-size')

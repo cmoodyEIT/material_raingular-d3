@@ -21,6 +21,11 @@ class MaterialRaingular.d3.Directives.PieChartModel extends AngularDirectiveMode
   addSlice: (slice) ->
     @slices.push(slice) unless @slices.includes(slice)
     return @slices.index(slice)
+  removeSlice: (slice) ->
+    index = @slices.index(slice)
+    @slices.splice(index,1)
+    @values.splice(index,1)
+    @drawChart()
   changeData: (slice,value) ->
     @slices.push(slice) unless @slices.includes(slice)
     index = @slices.indexOf(slice)
