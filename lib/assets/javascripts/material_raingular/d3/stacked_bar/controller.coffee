@@ -63,7 +63,7 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
         bar.attr('y',y)
         bar.attr('height',height)
         bar.attr('x',usedSpace)
-        bar.attr('width',barWidth)
+        bar.attr('width',barWidth || 0)
         usedSpace += barWidth
         text.attr('x', parseFloat(bar.attr('width'))/2 + parseFloat(bar.attr('x')))
         .attr('y',parseFloat(bar.attr('y')) + parseFloat(bar.attr('height'))/2 + 5)
