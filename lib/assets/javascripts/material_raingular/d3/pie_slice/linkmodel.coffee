@@ -26,6 +26,7 @@ class PieSliceModel extends AngularLinkModel
     .on('mouseout',  @_mouseOut.bind(@))
     .on('mousemove', @_mouseMove.bind(@))
     .on('click',     @_click.bind(@))
+    @afterDraw()
   addText: ->
     @text = @slice.append('text')
     .style('text-anchor', 'middle')
@@ -39,6 +40,7 @@ class PieSliceModel extends AngularLinkModel
     x = centroid[0]
     y = centroid[1]
     @text.attr 'transform', "translate(#{x},#{y})"
+    .style('display','block')
     .text @labelFn(@$scope)
     bbox = @text.node().getBBox()
     topLeft =
@@ -57,7 +59,7 @@ class PieSliceModel extends AngularLinkModel
               _pointIsInArc(topRight, @$controller, @index) &&
               _pointIsInArc(bottomLeft, @$controller, @index) &&
               _pointIsInArc(bottomRight, @$controller, @index)
-    @text.attr('display', 'none') unless visible
+    @text.style('display', 'none') unless visible
   removeSlice: -> @$controller.removeSlice(@)
   afterDraw: ->
     @adjustText()

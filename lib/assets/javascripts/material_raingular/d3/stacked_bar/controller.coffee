@@ -16,6 +16,7 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
   rawSize: -> (@bars().nodes().map (rect) => d3.select(rect).attr('raw-size')).sum()
   removeText: ->
     text.remove() for text in @texts
+    @adjustBars()
   adjustBars: ->
     @bar.attr('raw-size',@rawSize() || 0)
     @bar.attr('label',   @label(@$scope))
@@ -61,7 +62,7 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
         ratio = width / @bar.attr('raw-size')
         barWidth = ratio * bar.attr('raw-size')
         bar.attr('y',y)
-        bar.attr('height',height)
+        bar.attr('height',height || 0)
         bar.attr('x',usedSpace)
         bar.attr('width',barWidth || 0)
         usedSpace += barWidth
