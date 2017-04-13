@@ -65,8 +65,8 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
         bar.attr('height',height || 0)
         bar.attr('x',usedSpace)
         bar.attr('width',barWidth || 0)
-        usedSpace += barWidth
-        text.attr('x', parseFloat(bar.attr('width'))/2 + parseFloat(bar.attr('x')))
+        usedSpace += (barWidth || 0)
+        text.attr('x', parseFloat(bar.attr('width' || 0))/2 + parseFloat(bar.attr('x')))
         .attr('y',parseFloat(bar.attr('y')) + parseFloat(bar.attr('height'))/2 + 5)
         if text.node().getBBox().width > barWidth
           text.attr('display', 'none')

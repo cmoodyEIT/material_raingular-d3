@@ -29,7 +29,7 @@ class MaterialRaingular.d3.Directives.MrD3HorizontalBarChartModel extends Angula
       rect = d3.select(bar)
       @yDomain[@indexOf(bar)] = rect.attr('label')
       width = (rect.attr('raw-size') / @maxValue()) * @width()
-      rect.attr('width',width)
+      rect.attr('width',width || 0)
     @yAxis.domain(angular.copy(@yDomain).reverse())
     for rect in @bars().nodes()
       d3.select(rect).attr('height',@yAxis.bandwidth())
