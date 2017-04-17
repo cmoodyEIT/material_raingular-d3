@@ -6,9 +6,11 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
     @parent ?= @$element.parent().controller('mrD3HorizontalBarChart')
     @bar     = d3.select(@$element[0])
     @label   = @$parse @$element.attr('mr-d3-label')
+    @stacked = @$parse @$element.attr('mr-d3-stacked')
     @texts   = []
     @$scope.$watch @label.bind(@), @adjustBars.bind(@)
     @$scope.$watch @size.bind(@),  @adjustBars.bind(@)
+    @$scope.$watch @stacked.bind(@),  @adjustBars.bind(@)
     @$scope.$on '$destroy', @removeText.bind(@)
     @adjustBars()
   bars: -> @bar.selectAll('rect')
@@ -31,6 +33,9 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
     fillRegex = /.*\(([0-9]+\, [0-9]+\, [0-9]+).*\)/
     @parent.holder.selectAll("text.bar.#{key}").remove()
     length = @bars().nodes().length
+    nonzero = 0
+    for rect,i in @bars().nodes()
+      nonzero += 1 if d3.select(rect).attr('raw-size') > 0
     for rect,i in @bars().nodes()
       bar = d3.select(rect)
       bar.attr('class',"#{i} bar")
@@ -55,23 +60,30 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
         bar.attr('y',@parent.height() - usedSpace)
         bar.attr('height',barHeight)
         text.attr('x', -parseFloat(bar.attr('y')) - parseFloat(bar.attr('height'))/2)
-        .attr('y',parseFloat(bar.attr('x')) + parseFloat(bar.attr('width')))
+        .attr('y',parseFloat(bar.attr('x')) + parseFloat(bar.attr('width'))/2 + 5)
         .attr('transform','rotate(-90)')
-        .style('pointer-events', 'none')
       else
         ratio = width / @bar.attr('raw-size')
         barWidth = ratio * bar.attr('raw-size')
-        bar.attr('y',y)
-        bar.attr('height',height || 0)
-        bar.attr('x',usedSpace)
         bar.attr('width',barWidth || 0)
-        usedSpace += (barWidth || 0)
+        if @stacked(@$scope)
+          bar.attr('y',y)
+          bar.attr('height',height || 0)
+          bar.attr('x',usedSpace)
+          usedSpace += barWidth || 0
+        else
+          barHeight = height / nonzero
+          bar.attr('y',parseFloat(y) + usedSpace)
+          bar.attr('height',barHeight)
+          bar.attr('x',0)
+          usedSpace += barHeight if barWidth > 0
         text.attr('x', parseFloat(bar.attr('width' || 0))/2 + parseFloat(bar.attr('x')))
         .attr('y',parseFloat(bar.attr('y')) + parseFloat(bar.attr('height'))/2 + 5)
-        if text.node().getBBox().width > barWidth
-          text.attr('display', 'none')
-        else
-          text.style('pointer-events', 'none')
+      bbox = text.node().getBBox()
+      if bbox.width > barWidth || (bbox.height > height || barHeight)
+        text.attr('display', 'none')
+      else
+        text.style('pointer-events', 'none')
   _mouseOver: (d,i,parentLabel) ->
     d3.select("#tip-table-" + parentLabel)
       .classed('hidden', false)
