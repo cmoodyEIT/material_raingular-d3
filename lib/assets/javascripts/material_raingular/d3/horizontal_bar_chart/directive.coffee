@@ -14,9 +14,9 @@ class MrD3HorizontalBarChart extends AngularDirective
     mr-d3-bar mr-d3-label="'this'" mr-d3-value="'200'"
     mr-d3-x-axis ng-init="domain = [0,37]" mr-d3-label="'Value'" mr-d3-domain='domain'
 
-    mr-d3-stacked-bar mr-d3-label="'CA'"
+    mr-d3-stacked-bar mr-d3-label="'CA'" mr-d3-stacked="true"
       mr-d3-bar ng-repeat="data in [10,4,7] track by $index" mr-d3-label="data" mr-d3-value="data"
-    mr-d3-stacked-bar mr-d3-label="'AZ'"
+    mr-d3-stacked-bar mr-d3-label="'AZ'" mr-d3-stacked="true"
       mr-d3-bar ng-repeat="data in [10,4,7] track by $index" mr-d3-label="data" mr-d3-value="data"
     mr-d3-y-axis mr-d3-label="'Arbitrary'"
 ###
