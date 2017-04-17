@@ -28,7 +28,7 @@ class MaterialRaingular.d3.Directives.MrD3BarChartModel extends AngularDirective
     for bar in @bars().nodes()
       rect = d3.select(bar)
       @xDomain[@indexOf(bar)] = rect.attr('label')
-      height = (rect.attr('raw-size') / @maxValue()) * @width()
+      height = (rect.attr('raw-size') / @maxValue()) * @height()
       rect.attr('y',@height() - height)
       rect.attr('height',height)
     @xAxis.domain(@xDomain)

@@ -54,14 +54,26 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
       if @direction == 'vertical'
         ratio = height / @bar.attr('raw-size')
         barHeight = ratio * bar.attr('raw-size')
-        usedSpace += barHeight
-        bar.attr('x',x)
-        bar.attr('width',width)
-        bar.attr('y',@parent.height() - usedSpace)
-        bar.attr('height',barHeight)
+        bar.attr('height',barHeight || 0)
+        if @stacked(@$scope)
+          usedSpace += barHeight || 0
+          bar.attr('x',x)
+          bar.attr('width',width || 0)
+          bar.attr('y',@parent.height() - usedSpace)
+        else
+          barWidth = width / nonzero
+          bar.attr('width', barWidth)
+          bar.attr('x', parseFloat(x) + usedSpace)
+          bar.attr('y', @parent.height() - barHeight)
+          usedSpace += barWidth if barHeight > 0
         text.attr('x', -parseFloat(bar.attr('y')) - parseFloat(bar.attr('height'))/2)
         .attr('y',parseFloat(bar.attr('x')) + parseFloat(bar.attr('width'))/2 + 5)
         .attr('transform','rotate(-90)')
+        bbox = text.node().getBBox()
+        if (bbox.width > barHeight) || (bbox.height > width || barWidth)
+          text.style('display','none')
+        else
+          text.style('pointer-events', 'none').style('display', 'block')
       else
         ratio = width / @bar.attr('raw-size')
         barWidth = ratio * bar.attr('raw-size')
@@ -79,11 +91,11 @@ class MaterialRaingular.d3.Directives.MrD3StackedBar extends AngularDirectiveMod
           usedSpace += barHeight if barWidth > 0
         text.attr('x', parseFloat(bar.attr('width' || 0))/2 + parseFloat(bar.attr('x')))
         .attr('y',parseFloat(bar.attr('y')) + parseFloat(bar.attr('height'))/2 + 5)
-      bbox = text.node().getBBox()
-      if bbox.width > barWidth || (bbox.height > height || barHeight)
-        text.attr('display', 'none')
-      else
-        text.style('pointer-events', 'none')
+        bbox = text.node().getBBox()
+        if bbox.width > barWidth || (bbox.height > height || barHeight)
+          text.style('display', 'none')
+        else
+          text.style('pointer-events', 'none').style('display', 'block')
   _mouseOver: (d,i,parentLabel) ->
     d3.select("#tip-table-" + parentLabel)
       .classed('hidden', false)
